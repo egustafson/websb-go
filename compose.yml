@@ -1,0 +1,14 @@
+services:
+  websb:
+    build:
+      context: .
+      dockerfile: Containerfile 
+    container_name: websb
+    ports:
+      - "8080:8080"
+      - "8443:8443"
+    volumes:
+      - ./etc:/app/etc
+    environment:
+      - WEBSB_LOGLEVEL=DEBUG
+    restart: unless-stopped

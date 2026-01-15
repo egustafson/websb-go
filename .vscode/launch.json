@@ -1,0 +1,26 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Daemon",
+            "type": "go",
+            "request": "launch",
+            "mode": "auto",
+            "program": "main.go",
+            "env": {
+                "WEBSB_LOGLEVEL": "DEBUG",
+                "WEBSB_CONFIG": "./websb.yaml"
+            },
+            "args": ["daemon"]
+        },
+        {
+            "name": "About",
+            "type": "go",
+            "request": "launch",
+            "mode": "auto",
+            "program": "main.go",
+            "env": {"WEBSB_LOGLEVEL": "DEBUG"},
+            "args": ["about", "-v"]
+        }
+    ]
+}
