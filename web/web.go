@@ -3,6 +3,8 @@ package web
 import (
 	"context"
 	"fmt"
+	"html/template"
+	"io/fs"
 	"log/slog"
 	"net"
 	"net/http"
@@ -21,14 +23,26 @@ func Run(ctx context.Context) (err error) {
 	srvCfg := config.MustServerConfig(ctx)
 
 	router := gin.Default() // root of the web routes
-	router.GET("/live", LivenessHandler)
-	router.GET("/ready", ReadinessHandler)
-	router.GET("/healthz", ReadinessHandler)
 
+	templates := template.Must(template.ParseFS(embeddedFiles, "templates/*.html"))
+	router.SetHTMLTemplate(templates)
+
+	staticFiles, err := fs.Sub(embeddedFiles, "static")
+	if err != nil {
+		return fmt.Errorf("failed to get static files: %w", err)
+	}
+	router.StaticFS("/static", http.FS(staticFiles))
+
+	//
 	// TODO: middleware ??
+	//
 
 	ui.Init(ctx, srvCfg, router.Group(""))      // initialize UI components
 	api.Init(ctx, srvCfg, router.Group("/api")) // initialize API components
+
+	router.GET("/live", LivenessHandler)
+	router.GET("/ready", ReadinessHandler)
+	router.GET("/healthz", ReadinessHandler)
 
 	// Start the server
 	//

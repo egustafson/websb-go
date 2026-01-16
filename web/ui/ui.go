@@ -2,6 +2,7 @@ package ui
 
 import (
 	"context"
+	"time"
 
 	"github.com/gin-gonic/gin"
 
@@ -9,5 +10,12 @@ import (
 )
 
 func Init(ctx context.Context, srvCfg *config.ServerConfig, router *gin.RouterGroup) {
-	// STUB: initialize UI components
+
+	router.GET("/", func(c *gin.Context) {
+		c.HTML(200, "index.html", gin.H{
+			"timestamp": time.Now().Format(time.RFC3339),
+		})
+	})
+
+	// TODO: more initialization
 }

@@ -12,3 +12,4 @@ services:
     environment:
       - WEBSB_LOGLEVEL=DEBUG
     restart: unless-stopped
+    command: [ "/app/websb", "daemon" ]
